@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  GARBAGE_COLLECTOR
+  COLLECTION_COMPANY
+}
+
+//criar uma migration (tabela) com o comando: yarn prisma migrate dev
+
+model User {
+  id       String   @id @default(uuid())
+  name     String
+  role     UserRole
+  email    String   @unique
+  password String
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  Point Point?
+
+  @@map("users")
+}
+
+model Point {
+  id        String  @id @default(uuid())
+  name      String
+  image     String?
+  email     String?
+  whatsapp  String
+  latitude  Float
+  longitude Float
+  city      String
+  uf        String
+  userId    String @unique
+  user      User    @relation(fields: [userId], references: [id])
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  // Adicione o campo de relação oposto para Point_Items
+  pointItems    Point_Items[]
+  neighborhoods Neighborhood[]
+
+  @@map("points")
+}
+
+model Neighborhood {
+  id         String  @id @default(uuid())
+  name       String
+  frequency  String?
+  latitude   Float
+  longitude  Float
+  daysOfWeek String
+
+  created_at DateTime? @default(now())
+  updated_at DateTime? @default(now())
+
+  point   Point  @relation(fields: [pointId], references: [id])
+  pointId String
+
+  @@map("neighborhoods")
+}
+
+model Item {
+  id         String        @id @default(uuid())
+  image      String
+  title      String
+  // Adicione o campo de relação oposto para Point_Items
+  pointItems Point_Items[]
+}
+
+model Point_Items {
+  id       String @id @default(uuid())
+  point_id String
+  item_id  String
+  point    Point  @relation(fields: [point_id], references: [id])
+  item     Item   @relation(fields: [item_id], references: [id])
+}
