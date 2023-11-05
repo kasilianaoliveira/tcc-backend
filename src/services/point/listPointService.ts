@@ -10,9 +10,6 @@ export class ListPointsService {
           select: {
             item:true
           }
-          // include: {
-          //   item: true,
-          // },
         },
       },
     });
