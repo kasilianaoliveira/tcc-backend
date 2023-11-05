@@ -19,7 +19,7 @@ export class CreatePointController {
       userId
     })
 
-    return res.json(point);
+    return res.status(200).json(point);
 
   }
 }

@@ -22,7 +22,7 @@ export function isAuthenticated(
 
   
   try{
-    //Validar esse token.
+    
     const { sub } = verify(
       token,
       process.env.JWT_SECRET
@@ -34,7 +34,7 @@ export function isAuthenticated(
     return next();
 
   }catch(err){
-    return res.status(401).end();
+    return res.status(401).json({message: "Unauthorized user, please login to gain access"});
   }
 
 

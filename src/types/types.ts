@@ -33,6 +33,13 @@ export interface PointItems {
   item_id: string;
 }
 
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+}
+
 // interface PointNeighborhood {
 //   id: string;
 //   point_id: string;
