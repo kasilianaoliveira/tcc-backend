@@ -2,12 +2,12 @@ version: '3.5'
 
 services:
   postgres:
-    container_name: postgres-tcc
+    container_name: tcc
     image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 2405
-      POSTGRES_DB: tcc-project
+      POSTGRES_DB: tcc-backend
     volumes:
       - ./data:/data/postgres
     ports:
