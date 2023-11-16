@@ -35,8 +35,6 @@ model Point {
   image     String?
   email     String?
   whatsapp  String
-  latitude  Float
-  longitude Float
   city      String
   uf        String
   userId    String @unique
@@ -55,10 +53,10 @@ model Point {
 model Neighborhood {
   id         String  @id @default(uuid())
   name       String
-  frequency  String?
   latitude   Float
   longitude  Float
-  daysOfWeek String
+  street     String?
+  daysOfWeek String[]
 
   created_at DateTime? @default(now())
   updated_at DateTime? @default(now())
