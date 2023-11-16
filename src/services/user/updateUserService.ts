@@ -15,7 +15,7 @@ export class UpdateUserService {
         throw new Error(`User with ID ${id} not found`);
       }
 
-      if (email !== existingUser.email) {
+      if (email && email !== existingUser.email) {
         const userWithSameEmail = await prismaClient.user.findFirst({
           where: { email },
         });
@@ -25,16 +25,31 @@ export class UpdateUserService {
         }
       }
 
-      const passwordHash = await hash(password, 8)
+      if (password) {
+        const passwordHash = await hash(password, 8)
 
-      await prismaClient.user.update({
-        where: { id },
-        data: {
-          name,
-          email,
-          password: passwordHash
-        }
-      })
+        const response = await prismaClient.user.update({
+          where: { id },
+          data: {
+            name: name !== undefined ? name : existingUser.name,
+            email: email !== undefined ? email : existingUser.email,
+            password: passwordHash
+          }
+        })
+
+        return response
+      } else {
+         const updateResponse = await prismaClient.user.update({
+          where: { id },
+          data: {
+            name: name !== undefined ? name : existingUser.name,
+            email: email !== undefined ? email : existingUser.email,
+          },
+        });
+
+        return updateResponse
+      }
+
 
     } catch (error) {
       throw new Error(error)
