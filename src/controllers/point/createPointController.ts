@@ -3,18 +3,23 @@ import { CreatePointService } from "../../services/point/createPointService";
 
 export class CreatePointController {
   async handle(req: Request, res: Response) {
-    const { name, image, email, whatsapp, latitude, longitude, city, uf, items, neighborhoods, userId } = req.body;
+    const { name, email, whatsapp, city, uf, items, neighborhoods, userId } = req.body;
     const createPointService = new CreatePointService();
 
-    const point = await createPointService.execute({ 
-      name, 
-      email, 
-      image, 
-      whatsapp, 
-      latitude, 
-      longitude, 
+    const file = req.file;
+    let image: string | null = null;
+
+    if (file !== undefined) {
+      const { filename } = req.file;
+      image = filename;
+    }
+    const point = await createPointService.execute({
+      name,
+      email,
+      image,
+      whatsapp,
       city, uf,
-      pointItems:items, 
+      pointItems: items,
       neighborhoods,
       userId
     })
@@ -23,4 +28,3 @@ export class CreatePointController {
 
   }
 }
-

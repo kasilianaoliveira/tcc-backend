@@ -1,17 +1,50 @@
 import { prismaClient } from "../../prisma";
-import { Point, PointItems } from "../../types/types";
+export interface Point {
+  name: string;
+  image: string | null;
+  email: string | null;
+  whatsapp: string;
+  city: string;
+  uf: string;
+  pointItems: string;
+  neighborhoods:string;
+  userId: string;
+}
+
+interface Neighborhood {
+  name: string;
+  latitude: number;
+  longitude: number;
+  daysOfWeek: string[];
+  pointId: string;
+}
+
+export interface Item {
+  id: string;
+  image: string;
+  title: string;
+  pointItems: PointItems[];
+}
+
+export interface PointItems {
+  point_id: string;
+  item_id: string;
+}
+
 
 export class CreatePointService {
   async execute({
-    name, image, email, whatsapp, latitude, longitude, city, uf, pointItems, neighborhoods, userId }: Point) {
+    name, image, email, whatsapp, city, uf, pointItems, neighborhoods, userId }: Point) {
+
 
     try {
+
+
       const userAlreadyExists = await prismaClient.point.findFirst({
         where: {
           email: email
         }
       })
-
 
       if (userAlreadyExists) {
         throw new Error("Email already exists")
@@ -31,9 +64,19 @@ export class CreatePointService {
       const existingPoint = await prismaClient.point.findFirst({
         where: { userId }
       });
-  
+
       if (existingPoint) {
         throw new Error("User already has a point registered");
+      }
+
+      const whatsappAlreadyExists = await prismaClient.point.findFirst({
+        where: {
+          whatsapp: whatsapp
+        }
+      })
+
+      if (whatsappAlreadyExists) {
+        throw new Error("Whatsapp already has a point registered");
       }
 
 
@@ -42,19 +85,19 @@ export class CreatePointService {
           name,
           email,
           whatsapp,
-          image: "imagefake.svg",
-          latitude,
-          longitude,
+          image,
           city,
           uf,
           userId: userId
         },
       })
 
-      //items
-      const point_id = point.id
+      // items
+      const point_id = point.id;
 
-      const point_items = pointItems.map(item_id => {
+      const itemIdsArray = pointItems.split(',').map(item => item.trim());
+
+      const point_items = itemIdsArray.map(item_id => {
         return {
           item_id,
           point_id
@@ -67,14 +110,18 @@ export class CreatePointService {
       });
 
 
-      // //bairros
 
-      const neighborhoodsData = neighborhoods.map(neighborhoodData => ({
+      
+      // //bairros
+      const neighborhoodArray: Neighborhood[] = JSON.parse(neighborhoods);
+
+      const neighborhoodsData = neighborhoodArray.map(neighborhoodData => ({
         ...neighborhoodData,
         pointId: point_id,
       }));
 
-     await prismaClient.neighborhood.createMany({
+
+      await prismaClient.neighborhood.createMany({
         data: neighborhoodsData,
       });
 
@@ -84,7 +131,9 @@ export class CreatePointService {
         pointItems: point_items,
         neighborhoods: neighborhoodsData,
       };
+
     } catch (error) {
+      console.log(error)
       throw new Error(error)
     }
 
