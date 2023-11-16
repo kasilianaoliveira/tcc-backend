@@ -3,19 +3,20 @@ import { prismaClient } from "../../prisma";
 export class ListPointsUserService {
   async execute(id: string) {
 
-    const user = await prismaClient.point.findFirst({
+    const pointId = await prismaClient.point.findFirst({
       where:{
         userId: id
       }
     })
 
-    if(!user){
-      throw new Error(`User ${id} not found`)
+
+    if(!pointId){
+      throw new Error(`Point not found`)
     }
 
-    const points = await prismaClient.point.findMany({
+    const point = await prismaClient.point.findFirst({
       where:{
-        userId: id
+        userId: id,
       },
       include: {
         neighborhoods: true,
@@ -24,11 +25,24 @@ export class ListPointsUserService {
             item:true
           }
         },
-        
       },
     });
 
-    return points
+
+    const serializedPoint = {
+      ...point,
+      image: `http://localhost:3333/uploads/${point.image}`,
+      pointItems: point.pointItems.map((pointItem) => ({
+        item: {
+          id: pointItem.item.id,
+          title: pointItem.item.title,
+          image_url: `http://localhost:3333/uploads/${pointItem.item.image}`,
+        },
+      })),
+    };
+
+
+    return serializedPoint
 
   }
 }

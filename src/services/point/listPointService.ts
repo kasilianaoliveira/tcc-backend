@@ -7,14 +7,25 @@ export class ListPointsService {
       include: {
         neighborhoods: true,
         pointItems: {
-          select: {
-            item:true
+          include:{
+            item:{
+              select: {
+                title:true
+              }
+            }
           }
         },
       },
     });
 
-    return points
+    const serializedPoint = points.map(point => {
+      return {
+        ...point,
+        image: `http://localhost:3333/uploads/${point.image}`,
+      };
+    });
+
+    return serializedPoint
 
   }
 }
