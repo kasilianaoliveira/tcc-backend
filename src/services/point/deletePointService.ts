@@ -30,11 +30,9 @@ export class DeletePointService {
         },
       });
 
-      const t = await prismaClient.point.delete({
+      await prismaClient.point.delete({
         where: { id: pointId },
       });
-
-      console.log(t);
 
       return existingPoint;
 

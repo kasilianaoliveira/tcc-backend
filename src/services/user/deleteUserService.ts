@@ -44,9 +44,8 @@ export class DeleteUserService {
       await prismaClient.user.delete({
         where: { id },
       });
-      console.log(userPoints)
 
-
+      
 
     } catch (error) {
       throw new Error(error)
