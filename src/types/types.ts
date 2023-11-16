@@ -3,8 +3,6 @@ export interface Point {
   image: string | null;
   email: string | null;
   whatsapp: string;
-  latitude: number;
-  longitude: number;
   city: string;
   uf: string;
   pointItems: PointItems[];
@@ -14,14 +12,13 @@ export interface Point {
 
 interface Neighborhood {
   name: string;
-  frequency?: string | null;
   latitude: number;
   longitude: number;
-  daysOfWeek: string;
+  daysOfWeek: string[];
   pointId: string;
 }
 
-interface Item {
+export interface Item {
   id: string;
   image: string;
   title: string;
@@ -39,11 +36,3 @@ export interface User {
   email: string;
   password: string;
 }
-
-// interface PointNeighborhood {
-//   id: string;
-//   point_id: string;
-//   neighborhood_id: string;
-//   point: Point;
-//   neighborhood: Neighborhood;
-// }
