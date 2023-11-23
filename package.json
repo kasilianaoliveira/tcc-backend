@@ -13,7 +13,7 @@
   "scripts": {
     "build": "rimraf --files ./build && tsc",
     "dev": "ts-node-dev src/server.ts",
-    "start": "ts-node --files ./src/index.ts"
+    "start": "ts-node --files ./src/server.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.5",
