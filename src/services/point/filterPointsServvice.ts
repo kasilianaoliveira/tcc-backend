@@ -67,7 +67,7 @@ export class FilterPointsService {
       const serializedPoint = points.map(point => {
         return {
           ...point,
-          image: `http://localhost:3333/uploads/${point.image}`,
+          image: `https://tccbackend-api.onrender.com/uploads/${point.image}`,
         };
       });
 

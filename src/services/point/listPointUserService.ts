@@ -31,12 +31,12 @@ export class ListPointsUserService {
 
     const serializedPoint = {
       ...point,
-      image: `http://localhost:3333/uploads/${point.image}`,
+      image: `https://tccbackend-api.onrender.com/uploads/${point.image}`,
       pointItems: point.pointItems.map((pointItem) => ({
         item: {
           id: pointItem.item.id,
           title: pointItem.item.title,
-          image_url: `http://localhost:3333/uploads/${pointItem.item.image}`,
+          image_url: `https://tccbackend-api.onrender.com/uploads/${pointItem.item.image}`,
         },
       })),
     };

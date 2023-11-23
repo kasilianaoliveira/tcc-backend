@@ -10,7 +10,7 @@ export class ItemsListController {
       return {
         id: item.id,
         title: item.title,
-        image_url: `http://localhost:3333/uploads/${item.image}`,
+        image_url: `https://tccbackend-api.onrender.com/uploads/${item.image}`,
       };
     });
 
