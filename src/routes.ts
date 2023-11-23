@@ -19,6 +19,9 @@ import { UpdatePointController } from './controllers/point/updatePointController
 import { UpdateItemController } from './controllers/item/updateItemsController';
 
 import uploadConfig from './config/multer';
+import { DeleteNeighborhoodController } from './controllers/neighborhoods/deleteNeighborhoodController';
+import { ListNeighborhoodPointController } from './controllers/neighborhoods/listNeighborhoodPointController';
+import { UpdateNeighborhoodController } from './controllers/neighborhoods/updateNeighborhoodController';
 
 const router = Router();
 const upload = multer(uploadConfig)
@@ -42,8 +45,9 @@ router.get('/pointFilter', new FilterPointsController().handle)
 router.put('/point/:id', upload.single('image'), new UpdatePointController().handle)
 //Neighborhood
 router.get('/neighborhood', new ListNeighborhoodController().handle);
-
-
+router.get('/neighborhood/:id', new ListNeighborhoodPointController().handle);
+router.delete('/neighborhood/:id', new DeleteNeighborhoodController().handle)
+router.put('/neighborhood/:id', new UpdateNeighborhoodController().handle)
 //reciclagem
 router.get('/api/places', new listPlacesController().handle)
 
