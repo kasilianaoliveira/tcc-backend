@@ -43,11 +43,10 @@ export class UpdatePointService {
         }
       }
 
-
       const updatedData: Record<string, any> = {
         name: name !== undefined ? name : currentPoint.name,
         email: email !== undefined ? email : currentPoint.email,
-        image: image !== undefined ? image : currentPoint.image,
+        image: image !== null ? image : currentPoint.image,
         whatsapp: whatsapp !== undefined ? whatsapp : currentPoint.whatsapp,
         city: city !== undefined ? city : currentPoint.city,
         uf: uf !== undefined ? uf : currentPoint.uf,

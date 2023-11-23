@@ -13,6 +13,7 @@ export class CreatePointController {
       const { filename } = req.file;
       image = filename;
     }
+
     const point = await createPointService.execute({
       name,
       email,

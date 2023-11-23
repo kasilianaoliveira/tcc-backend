@@ -1,4 +1,4 @@
-import express, {Request, Response, NextFunction} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import 'express-async-errors';
 import cors from 'cors';
 import path from 'path';
@@ -15,8 +15,8 @@ app.use(router);
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  
-  if(err instanceof Error){
+
+  if (err instanceof Error) {
     return res.status(400).json({
       error: err.message
     })
@@ -30,4 +30,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 
 
-app.listen(port, ()=> console.log('Server is running on port 3333 !'));
+app.listen(port, () => console.log('Server is running on port 3333 !'));

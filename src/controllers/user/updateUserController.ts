@@ -11,7 +11,6 @@ export class UpdateUserController {
 
       const update = await updateUserService.execute({ id, name, email, password });
 
-      console.log(update)
       return res.json({ message: "User updated successfully", update});
     } catch (error) {
       return res.status(500).json({ error: error.message });
