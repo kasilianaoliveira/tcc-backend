@@ -5,12 +5,12 @@ export class FilterPointsController {
   async handle(req: Request, res: Response) {
     try {
 
-      const { city, uf, items } = req.query;
+      const { city, uf, filterRole } = req.query;
 
       const filterPointsService = new FilterPointsService()
 
 
-      const points = await filterPointsService.execute({city,uf});
+      const points = await filterPointsService.execute({city,uf,filterRole});
 
       return res.json(points);
 

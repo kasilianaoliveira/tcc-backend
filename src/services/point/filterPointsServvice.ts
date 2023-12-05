@@ -1,7 +1,7 @@
 import { prismaClient } from "../../prisma";
 
 export class FilterPointsService {
-  async execute({ city, uf }) {
+  async execute({ city, uf, filterRole }) {
 
     try {
       const cityAlreadyExists = await prismaClient.point.findMany({
@@ -11,7 +11,7 @@ export class FilterPointsService {
       });
 
 
-      if(!cityAlreadyExists){
+      if (!cityAlreadyExists) {
         throw new Error('City not found');
       }
 
@@ -21,11 +21,17 @@ export class FilterPointsService {
         }
       });
 
-      if(!ufAlreadyExists){
+      if (!ufAlreadyExists) {
         throw new Error('UF not found');
       }
 
 
+      // Verifica se filterRole é uma das roles permitidas
+      const rolesPermitidas = ['GARBAGE_COLLECTOR', 'COLLECTION_COMPANY'];
+
+      if (filterRole && filterRole !== 'ALL' && !rolesPermitidas.includes(filterRole)) {
+        throw new Error('Role not allowed');
+      }
       // const itemsAlreadyExists = await prismaClient.point.findMany({
       //   where: {
       //     pointItems: {
@@ -46,13 +52,7 @@ export class FilterPointsService {
         where: {
           city: city,
           uf: uf,
-          // pointItems: {
-          //   some: {
-          //     item_id: {
-          //       in: parseditems,
-          //     },
-          //   },
-          // },
+          ...(filterRole && filterRole !== 'ALL' && { user: { role: filterRole } }),
         },
         include: {
           neighborhoods: true,
