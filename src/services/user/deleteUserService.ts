@@ -9,6 +9,7 @@ export class DeleteUserService {
         where: { id: id },
       });
 
+
       if (!existingUser) {
         throw new Error(`User ${id} not found`);
       }
@@ -16,36 +17,37 @@ export class DeleteUserService {
 
       const userPoints = await prismaClient.point.findFirst({
         where: { userId: id },
-        include:{
-          neighborhoods:true,
-          pointItems:true
+        include: {
+          neighborhoods: true,
+          pointItems: true
         }
       });
 
-
-      await prismaClient.neighborhood.deleteMany({
-          where: { 
+      if (userPoints) {
+        await prismaClient.neighborhood.deleteMany({
+          where: {
             pointId: userPoints.id
           },
         });
 
-      await prismaClient.point_Items.deleteMany({
-          where: { 
+        await prismaClient.point_Items.deleteMany({
+          where: {
             point_id: userPoints.id
           },
         });
 
+        await prismaClient.point.deleteMany({
+          where: { userId: id },
+        });
 
-      await prismaClient.point.deleteMany({
-        where: { userId: id },
-      });
+      }
 
 
       await prismaClient.user.delete({
         where: { id },
       });
 
-      
+
 
     } catch (error) {
       throw new Error(error)
